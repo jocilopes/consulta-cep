@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Via Cep </title>
+    <style>
+        /* Estilo do fundo */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f0f2f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        /* Container principal */
+        .container {
+            background-color: white;
+            max-width: 350px;
+            width: 100%;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+
+        h2 {
+            color: #40221e;
+            margin-bottom: 20px;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 15px;
+            border: 2px solid #e1e5ee;
+            border-radius: 10px;
+            box-sizing: border-box;
+            outline: none;
+            text-align: center;
+            transition: border-color 0.3s;
+        }
+
+        input:focus {
+            border-color: #a29593;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            background-color: #624f47;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            transition: background 0.3s;
+        }
+
+        button:hover {
+            background-color: #4f3123;
+        }
+
+        /* Área do resultado */
+        #textoResultado {
+            margin-top: 25px;
+            white-space: pre-wrap;
+            text-align: left;
+            font-size: 14px;
+            line-height: 1.6;
+            color: #444;
+            background-color: #f8faff;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #75453e;
+            min-height: 50px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2>Via CEP</h2>
+        
+        <input id="campoCEP" placeholder="Digite o CEP (00000000)" maxlength="8">
+        
+        <button onclick="consultarCEP()">Consultar Endereço</button>
+        
+        <div id="textoResultado">Os dados aparecerão aqui...</div>
+    </div>
+
+    <script>
+        function consultarCEP() {
+            // pega o valor digitado
+            const cep = document.getElementById("campoCEP").value;
+
+            // consulta a API
+            fetch("https://viacep.com.br/ws/" + cep + "/json/")
+                .then(resposta => resposta.json())
+                .then(dados => {
+                    // mostra o resultado na tela
+                    document.getElementById("textoResultado").innerText =
+                        "CEP: " + dados.cep + "\n" +
+                        "Logradouro: " + dados.logradouro + " - " +
+                        dados.complemento + "\n" +
+                        "Bairro: " + dados.bairro + "\n" +
+                        "Cidade: " + dados.localidade + "\n" +
+                        "Estado: " + dados.uf;
+                })
+                .catch(error => {
+                    document.getElementById("textoResultado").innerText = "Erro ao buscar o CEP. Verifique se digitou corretamente.";
+                });
+        }
+    </script>
+
+</body>
+</html>
